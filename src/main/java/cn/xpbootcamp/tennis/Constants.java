@@ -8,4 +8,7 @@ public class Constants {
     public static final String DEUCE = "Deuce";
     public static final String ADVANTAGE = "Advantage";
     public static final String WIN = "Win";
+    public static final String PLAYER_1 = "player1";
+    public static final String PLAYER_2 = "player2";
+    public static final String ALL = "-All";
 }
