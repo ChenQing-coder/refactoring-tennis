@@ -1,95 +1,131 @@
 package cn.xpbootcamp.tennis;
 
-import static cn.xpbootcamp.tennis.Constants.PLAYER_1;
+import static cn.xpbootcamp.tennis.Constants.*;
 
 public class TennisGame2 implements TennisGame {
-    public int P1point = 0;
-    public int P2point = 0;
+    public int p1Point = 0;
+    public int p2Point = 0;
 
-    public String P1res = "";
-    public String P2res = "";
+    public String p1Result = "";
+    public String p2Result = "";
 
     public String getScore() {
         String score = "";
-        if (P1point == P2point && P1point < 4) {
-            if (P1point == 0)
-                score = "Love";
-            if (P1point == 1)
-                score = "Fifteen";
-            if (P1point == 2)
-                score = "Thirty";
-            score += "-All";
-        }
-        if (P1point == P2point && P1point >= 3)
-            score = "Deuce";
-
-        if (P1point > 0 && P2point == 0) {
-            if (P1point == 1)
-                P1res = "Fifteen";
-            if (P1point == 2)
-                P1res = "Thirty";
-            if (P1point == 3)
-                P1res = "Forty";
-
-            P2res = "Love";
-            score = P1res + "-" + P2res;
-        }
-        if (P2point > 0 && P1point == 0) {
-            if (P2point == 1)
-                P2res = "Fifteen";
-            if (P2point == 2)
-                P2res = "Thirty";
-            if (P2point == 3)
-                P2res = "Forty";
-
-            P1res = "Love";
-            score = P1res + "-" + P2res;
+        if (p1Point == p2Point) {
+            score = calculatePointWhenPointEqual(p1Point);
         }
 
-        if (P1point > P2point && P1point < 4) {
-            if (P1point == 2)
-                P1res = "Thirty";
-            if (P1point == 3)
-                P1res = "Forty";
-            if (P2point == 1)
-                P2res = "Fifteen";
-            if (P2point == 2)
-                P2res = "Thirty";
-            score = P1res + "-" + P2res;
+        if (p2Point == 0 || p1Point == 0) {
+            score = calculatePointWhenPointEqualZero(score);
+
         }
-        if (P2point > P1point && P2point < 4) {
-            if (P2point == 2)
-                P2res = "Thirty";
-            if (P2point == 3)
-                P2res = "Forty";
-            if (P1point == 1)
-                P1res = "Fifteen";
-            if (P1point == 2)
-                P1res = "Thirty";
-            score = P1res + "-" + P2res;
+        if (p1Point > p2Point && p1Point < 4) {
+            score = calculatePointWhenPointLessFour();
+        }
+        if (p2Point > p1Point && p2Point < 4) {
+            if (p2Point == 2)
+                p2Result = THIRTY;
+            if (p2Point == 3)
+                p2Result = FORTY;
+            if (p1Point == 1)
+                p1Result = FIFTEEN;
+            if (p1Point == 2)
+                p1Result = THIRTY;
+            score = p1Result + "-" + p2Result;
         }
 
-        if (P1point > P2point && P2point >= 3) {
-            score = "Advantage player1";
+        if (p1Point > p2Point && p2Point >= 3) {
+            score = ADVANTAGE + " player1";
         }
 
-        if (P2point > P1point && P1point >= 3) {
-            score = "Advantage player2";
+        if (p2Point > p1Point && p1Point >= 3) {
+            score = ADVANTAGE + " player2";
         }
 
-        if (P1point >= 4 && P2point >= 0 && (P1point - P2point) >= 2) {
-            score = "Win for player1";
+        if (p1Point >= 4 && p2Point >= 0 && (p1Point - p2Point) >= 2) {
+            score = WIN + " for player1";
         }
-        if (P2point >= 4 && P1point >= 0 && (P2point - P1point) >= 2) {
-            score = "Win for player2";
+        if (p2Point >= 4 && p1Point >= 0 && (p2Point - p1Point) >= 2) {
+            score = WIN + " for player2";
         }
         return score;
     }
 
+    protected String calculatePointWhenPointLessFour() {
+        String score;
+        if (p1Point == 2)
+            p1Result = THIRTY;
+        if (p1Point == 3)
+            p1Result = FORTY;
+        if (p2Point == 1)
+            p2Result = FIFTEEN;
+        if (p2Point == 2)
+            p2Result = THIRTY;
+        score = p1Result + "-" + p2Result;
+        return score;
+    }
+
+    protected String calculatePointWhenPointEqualZero(String score) {
+        if (p1Point > 0) {
+            p1Result = getPointLevelAboutPoint(p1Point);
+            p2Result = "Love";
+            score = p1Result + "-" + LOVE;
+        }
+        if (p2Point > 0) {
+            p2Result = getPointLevelAboutPoint(p2Point);
+            p1Result = "Love";
+            score = LOVE + "-" + p2Result;
+        }
+        return score;
+    }
+
+    protected String getPointLevelAboutPoint(int point) {
+        String result;
+        switch (point) {
+            case 1:
+                result = FIFTEEN;
+                break;
+            case 2:
+                result = THIRTY;
+                break;
+            case 3:
+                result = FORTY;
+                break;
+            default:
+                result = null;
+        }
+        return result;
+    }
+
+    protected String calculatePointWhenPointEqual(int point) {
+        String pointText = "";
+        switch (point) {
+            case 0:
+                pointText = LOVE;
+                break;
+            case 1:
+                pointText = FIFTEEN;
+                break;
+            case 2:
+                pointText = THIRTY;
+                break;
+            default:
+                pointText = null;
+                break;
+
+        }
+        if (pointText == null) {
+            pointText = "Deuce";
+        } else {
+            pointText += ALL;
+        }
+        return pointText;
+    }
+
     public void wonPoint(String player) {
         if (player == PLAYER_1)
-            P1point++;
+            p1Point++;
         else
-            P2point++;
+            p2Point++;
     }
 }
